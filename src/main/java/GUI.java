@@ -706,7 +706,25 @@ public class GUI {
      * This method is invoked when testing the functionality of the Save button.
      */
     private void testSaveButton(){
-        JOptionPane.showMessageDialog(mainFrame, "You have clicked the 'Save' button.", "Information", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(mainFrame, "You have clicked the 'Save' button.", "Information", JOptionPane.INFORMATION_MESSAGE);
+        int status = fileChooser.showSaveDialog(null);
+        if(status == JFileChooser.APPROVE_OPTION) {
+            try {
+                saveFile(fileChooser.getName(fileChooser.getSelectedFile()));
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(mainFrame, "No file selected", "No file", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+    }
+
+    private void saveFile(String name)
+        throws IOException
+    {
+        Path destination = Paths.get(name).toAbsolutePath();
+        ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(destination.toString()));
+        os.writeObject(game.getLog());
+        os.close();
     }
 
     /**
